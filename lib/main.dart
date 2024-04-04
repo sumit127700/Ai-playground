@@ -1,6 +1,3 @@
-import 'package:ai_playground_project/screens/chatgpt.dart';
-import 'package:ai_playground_project/screens/claude.dart';
-import 'package:ai_playground_project/screens/model_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_playground_project/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,7 +9,7 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(FlashChat());
+  runApp(const FlashChat());
 }
 
 class FlashChat extends StatelessWidget {
@@ -21,11 +18,11 @@ class FlashChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.black54),
         ),
       ),
-      home: WelcomeScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }

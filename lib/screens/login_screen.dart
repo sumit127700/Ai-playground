@@ -9,13 +9,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String email="";
-  String password="";
+  String email = "";
+  String password = "";
   final _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.teal,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -31,23 +33,23 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextField(
               onChanged: (value) {
-                email=value;
+                email = value;
               },
               decoration: const InputDecoration(
                 hintText: 'Enter your email',
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  BorderSide(color: Colors.lightBlueAccent, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  BorderSide(color: Colors.lightBlueAccent, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
               ),
@@ -57,23 +59,23 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextField(
               onChanged: (value) {
-                password=value;
+                password = value;
               },
               decoration: const InputDecoration(
                 hintText: 'Enter your password.',
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  BorderSide(color: Colors.lightBlueAccent, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  BorderSide(color: Colors.lightBlueAccent, width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                 ),
               ),
@@ -81,41 +83,65 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 24.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.lightBlueAccent,
-                borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () async{
-                    try {
-                      final newuser = await _auth
-                          .signInWithEmailAndPassword(
-                          email: email, password: password);
-                      newuser.user?.sendEmailVerification();
-                     if(newuser.user!.emailVerified){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ModelSelectionScreen()),
-                      );}
-                     else {
-                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(
-                       'Something is not right. Try again.'
-                     )));
-                     }
-                    }
-                    catch(e){
-                      print(e);
-                    }
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Log In',
+            Stack(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Material(
+                      color: Colors.lightBlueAccent,
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(30.0)),
+                      elevation: 5.0,
+                      child: MaterialButton(
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          try {
+                            final newuser =
+                            await _auth.signInWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                            );
+                            newuser.user?.sendEmailVerification();
+                            if (newuser.user!.emailVerified) {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                    const ModelSelectionScreen()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Something is not right. Try again.')));
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        },
+                        minWidth: 200.0,
+                        height: 42.0,
+                        child: const Text(
+                          'Log In',
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                if (_isLoading)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+              ],
             ),
           ],
         ),
