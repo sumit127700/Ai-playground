@@ -5,7 +5,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 class GeminiAPIService {
   static const String _baseUrl =
       'https://api.anthropic.com/v1'; // Replace with the actual API base URL
-  static const String _apiKey = 'AIzaSyB3LRpwg5YpcaqHn5dBhFLmxzBmtSNm3dI';
+  static const String _apiKey = 'Your_API_Key';
   Future<String?> sendMessage(List<String>previousMessages,String newMessage) async {
 
 
