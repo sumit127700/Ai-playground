@@ -7,7 +7,7 @@ class ChatGptApiService {
 // Replace with your actual API key
 
   final List<Map<String, String>> messages = [];
-  String OpenAiKey = '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';
+  String OpenAiKey = 'API_KEY_WITH_BALANCE';
 
   Future<String> sendMessage(String prompt) async {
     messages.add({
