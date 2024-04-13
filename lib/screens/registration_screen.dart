@@ -1,6 +1,10 @@
+import 'package:ai_playground_project/components/header_bungee.dart';
 import 'package:ai_playground_project/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ai_playground_project/components/hover_button.dart';
+import 'package:ai_playground_project/components/custom_text_field.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -17,72 +21,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal,
+      backgroundColor: Colors.black,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              height: 200.0,
-              child: Image.asset('images/logo.png'),
+            SizedBox(
+              height: 48.0,
+            ),
+            HeaderBungee(
+              headerText: 'Sign Up!',
             ),
             SizedBox(
               height: 48.0,
             ),
-            Text(
-              'Register',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 45.0,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            TextField(
+            CustomTextField(
+              hintText: 'Enter your Email!',
               onChanged: (value) {
                 email = value;
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                contentPadding:
-                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              ),
+              color:const Color(0xFF6200EE),
+              isPassword: false,
             ),
             SizedBox(
               height: 8.0,
             ),
-            TextField(
+            CustomTextField(
+              hintText: 'Enter your Password!',
               onChanged: (value) {
                 password = value;
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your password',
-                contentPadding:
-                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              ),
+              color:const Color(0xFF6200EE),
+              isPassword: true,
             ),
             SizedBox(
               height: 24.0,
@@ -91,42 +63,41 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Material(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                    elevation: 5.0,
-                    child: MaterialButton(
-                      onPressed: _isLoading
-                          ? null
-                          : () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        try {
-                          final newuser = await _auth
-                              .createUserWithEmailAndPassword(
-                              email: email, password: password);
-                          newuser.user?.sendEmailVerification();
+                  child: HoverButton(
+                    onPressed: _isLoading
+                        ? () => {}
+                        : () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            try {
+                              final newuser =
+                                  await _auth.createUserWithEmailAndPassword(
+                                      email: email, password: password);
+                              newuser.user?.sendEmailVerification();
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
-                        } catch (e) {
-                          print(e);
-                        }
-                        setState(() {
-                          _isLoading = false;
-                        });
-                      },
-                      minWidth: 200.0,
-                      height: 42.0,
-                      child: Text(
-                        'Register',
-                        style: TextStyle(color: Colors.white),
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()),
+                              );
+                            } catch (e) {
+                              print(e);
+                            }
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          },
+                    child: const Center(
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
                       ),
                     ),
+                    color: const Color(0xFF6200EE),
                   ),
                 ),
                 if (_isLoading)

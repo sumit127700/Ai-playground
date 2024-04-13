@@ -1,6 +1,9 @@
+import 'package:ai_playground_project/components/custom_text_field.dart';
+import 'package:ai_playground_project/components/header_bungee.dart';
 import 'package:ai_playground_project/screens/model_selection_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ai_playground_project/components/hover_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,68 +20,40 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal,
+      backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
-              height: 200.0,
-              child: Image.asset('images/logo.png'),
+            const SizedBox(
+              height: 48.0,
+            ),
+            HeaderBungee(
+              headerText: 'Login!',
             ),
             const SizedBox(
               height: 48.0,
             ),
-            TextField(
-              onChanged: (value) {
-                email = value;
+            CustomTextField(
+              onChanged: (value){
+                email=value;
               },
-              decoration: const InputDecoration(
-                hintText: 'Enter your email',
-                contentPadding:
-                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                  BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                  BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              ),
+              hintText: 'Enter your Email!',
+              color:Colors.purple,
+              isPassword: false,
             ),
             const SizedBox(
               height: 8.0,
             ),
-            TextField(
-              onChanged: (value) {
-                password = value;
+            CustomTextField(
+              onChanged: (value){
+                password=value;
               },
-              decoration: const InputDecoration(
-                hintText: 'Enter your password.',
-                contentPadding:
-                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                  BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                  BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              ),
+              hintText: 'Enter your Password!',
+              color:Colors.purple,
+              isPassword: true,
             ),
             const SizedBox(
               height: 24.0,
@@ -88,52 +63,51 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Material(
-                      color: Colors.lightBlueAccent,
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(30.0)),
-                      elevation: 5.0,
-                      child: MaterialButton(
-                        onPressed: _isLoading
-                            ? null
-                            : () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          try {
-                            final newuser =
-                            await _auth.signInWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            );
-                            newuser.user?.sendEmailVerification();
-                            if (newuser.user!.emailVerified) {
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const ModelSelectionScreen()),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'Something is not right. Try again.')));
-                            }
-                          } catch (e) {
-                            print(e);
-                          }
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        },
-                        minWidth: 200.0,
-                        height: 42.0,
+                    child: HoverButton(
+                      onPressed: _isLoading
+                          ? ()=>{}
+                          : () async {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              try {
+                                final newuser =
+                                    await _auth.signInWithEmailAndPassword(
+                                  email: email,
+                                  password: password,
+                                );
+                                newuser.user?.sendEmailVerification();
+                                if (newuser.user!.emailVerified) {
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ModelSelectionScreen()),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Something is not right. Try again.')));
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            },
+                      child: const Center(
                         child: const Text(
-                          'Log In',
+                          'Login',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.0,
+                          ),
                         ),
                       ),
+                      color: Colors.purple,
                     ),
                   ),
                 ),

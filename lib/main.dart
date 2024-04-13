@@ -1,3 +1,6 @@
+
+import 'package:ai_playground_project/screens/model_selection_screen.dart';
+import 'package:ai_playground_project/screens/playgrounds.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_playground_project/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +25,7 @@ class FlashChat extends StatelessWidget {
           bodyLarge: TextStyle(color: Colors.black54),
         ),
       ),
-      home: const WelcomeScreen(),
+      home: const PlaygroundScreen(),
     );
   }
 }
