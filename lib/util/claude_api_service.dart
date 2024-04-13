@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ClaudeAPIService {
   static const String _baseUrl = 'https://api.anthropic.com/v1'; // Replace with the actual API base URL
-  static const String _apiKey = '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'; // Replace with your actual API key
+  static const String _apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
 
   Future<String> sendMessage(String message) async {
     try{
